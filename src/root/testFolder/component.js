@@ -1,7 +1,7 @@
-import { someFoo } from '@app/01lesson/hello'
+import { someFoo } from "@app/root/hello";
 
 export const Component1 = () => ({
-  id: 'Component1',
-})
+  id: "Component1",
+});
 
-console.log('LessonFirst', someFoo)
+console.log("LessonFirst", someFoo);

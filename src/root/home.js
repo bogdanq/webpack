@@ -1,16 +1,17 @@
-'use strict'
+"use strict";
 
-import { Component1 } from './testFolder/component'
+import { Component1 } from "./testFolder/component";
+import css from "./style.css";
 
-const foo = () => false
-foo()
-//debugger -> suurce-map
-console.log(LANG)
-
-if (NODE_ENV === 'development') {
-  alert('development')
+if (NODE_ENV === "development") {
+  console.log("development ready");
 }
 
-console.log('Component1', Component1)
+console.log("Component1", Component1);
 
-export const welcome = () => alert('welcome')
+export const welcome = () => alert("welcome");
+
+console.log("NODE_ENV", NODE_ENV);
+console.log("LANG", LANG);
+
+console.log("css", css);
