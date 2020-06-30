@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const NODE_ENV = process.env.NODE_ENV || "development";
 const devMode = NODE_ENV === "development";
 
-module.exports = {
+const defaultConfig = {
   mode: NODE_ENV,
   entry: {
     // ТОчки входа, которые будут в dist
@@ -24,10 +24,10 @@ module.exports = {
   },
   //Будет слушать файлы
   watch: NODE_ENV === "development",
-  watchOptions: {
-    //времеожидания после изменения, после которого вебпак не выполняет сборку
-    aggregateTimeout: 100,
-  },
+  // watchOptions: {
+  //   //времеожидания после изменения, после которого вебпак не выполняет сборку
+  //   aggregateTimeout: 100,
+  // },
 
   // devtool: 'eval', => по умолчанию
   devtool: "cheap-inline-module-source-map",
@@ -53,11 +53,11 @@ module.exports = {
       removeDebugger: true,
       deadcode: false, // def => true
     }),
-    new MiniCssExtractPlugin({
-      filename: devMode ? "[name].css" : "[name].[hash].css",
-      chunkFilename: devMode ? "[id].css" : "[id].[hash].css",
-      ignoreOrder: false,
-    }),
+    // new MiniCssExtractPlugin({
+    //   filename: devMode ? "[name].css" : "[name].[hash].css",
+    //   chunkFilename: devMode ? "[id].css" : "[id].[hash].css",
+    //   ignoreOrder: false,
+    // }),
   ],
 
   module: {
@@ -78,14 +78,14 @@ module.exports = {
         test: /\.(sa|sc|c)ss$/,
         exclude: /node_modules/, // => исключить
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: path.resolve(__dirname, "dist"),
-              hmr: NODE_ENV === "development",
-            },
-          },
-          // "style", // dev mode
+          // {
+          //   loader: MiniCssExtractPlugin.loader,
+          //   options: {
+          //     publicPath: path.resolve(__dirname, "dist"),
+          //     hmr: NODE_ENV === "development",
+          //   },
+          // },
+          "style", // dev mode
           "css",
           "sass",
         ],
@@ -111,4 +111,17 @@ module.exports = {
     moduleExtensions: ["-loader"],
     extensions: [".js"],
   },
+
+  devServer: {
+    contentBase: path.resolve(__dirname, "dist"),
+    compress: true,
+    port: 8080,
+    hot: true,
+    liveReload: true,
+    // after: function (app, server, compiler) {
+    //   console.log("after", compiler);
+    // },
+  },
 };
+
+module.exports = defaultConfig;

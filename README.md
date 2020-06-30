@@ -28,3 +28,8 @@ node-sass, sass-loader
 ## HTML
 
 html-webpack-plugin
+
+## server
+
+webpack-dev-server
+"start": "webpack-dev-server --open",
