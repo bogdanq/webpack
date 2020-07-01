@@ -6,11 +6,11 @@ export function App() {
   return (
     <div>
       <div className={css.text}>
-        <h1>Hello My React App!</h1>
+        <h1>My React App!</h1>
       </div>
 
       <div className="text2">
-        <h1>children</h1>
+        <h1>hello children</h1>
       </div>
     </div>
   );
