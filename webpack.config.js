@@ -7,57 +7,58 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const NODE_ENV = process.env.NODE_ENV || "development";
 const devMode = NODE_ENV === "development";
+const cssRegex = /\.css$/;
+const cssModuleRegex = /\.module\.css$/;
 
 const defaultConfig = {
   mode: NODE_ENV,
   entry: {
     // ТОчки входа, которые будут в dist
-    main: path.resolve(__dirname, "src/root/home"),
-    cabinet: path.resolve(__dirname, "src/root/pages/user-cabinet"),
+    main: path.resolve(__dirname, "src/index.js"),
+    // cabinet: path.resolve(__dirname, "src/root/pages/user-cabinet"),
   },
   output: {
     // разбить код на файлы
-    filename: "[name].js",
+    filename: "[name].bundle.js",
     //сделать глобальную переменную
     library: "home",
     path: path.resolve(__dirname, "dist"),
   },
   //Будет слушать файлы
   watch: NODE_ENV === "development",
-  // watchOptions: {
-  //   //времеожидания после изменения, после которого вебпак не выполняет сборку
-  //   aggregateTimeout: 100,
-  // },
-
+  watchOptions: {
+    //времеожидания после изменения, после которого вебпак не выполняет сборку
+    aggregateTimeout: 100,
+  },
   // devtool: 'eval', => по умолчанию
   devtool: "cheap-inline-module-source-map",
   // Масси в екземпляров классов
   optimization: {
-    minimizer: [new OptimizeCSSAssetsPlugin({})],
+    minimizer: devMode ? [] : [new OptimizeCSSAssetsPlugin({})],
   },
   plugins: [
     //вырезать код для прода
     new HtmlWebpackPlugin({
       title: "hello webpack",
-      template: path.resolve(__dirname, "src/public/index.html"),
+      template: path.resolve(__dirname, "public/index.html"),
       inject: true,
     }),
     new webpack.DefinePlugin({
       // передать переменные
       NODE_ENV: JSON.stringify(NODE_ENV),
-      LANG: JSON.stringify("ru"),
     }),
     // минификация js файлов
+
     new MinifyPlugin({
-      // removeConsole: true,
-      removeDebugger: true,
+      removeConsole: !devMode,
+      removeDebugger: !devMode,
       deadcode: false, // def => true
     }),
-    // new MiniCssExtractPlugin({
-    //   filename: devMode ? "[name].css" : "[name].[hash].css",
-    //   chunkFilename: devMode ? "[id].css" : "[id].[hash].css",
-    //   ignoreOrder: false,
-    // }),
+    new MiniCssExtractPlugin({
+      filename: devMode ? "[name].css" : "[name].[hash].css",
+      chunkFilename: devMode ? "[id].css" : "[id].[hash].css",
+      // ignoreOrder: false,
+    }),
   ],
 
   module: {
@@ -69,26 +70,24 @@ const defaultConfig = {
         use: {
           // бабель плагины, обрабатывают код
           loader: "babel",
-          options: {
-            presets: ["@babel/preset-env"],
-          },
+          // options: {
+          //   // Можно указать в babelrc
+          //   presets: ["@babel/preset-env", "@babel/preset-react"],
+          // },
         },
       },
       {
-        test: /\.(sa|sc|c)ss$/,
-        exclude: /node_modules/, // => исключить
-        use: [
-          // {
-          //   loader: MiniCssExtractPlugin.loader,
-          //   options: {
-          //     publicPath: path.resolve(__dirname, "dist"),
-          //     hmr: NODE_ENV === "development",
-          //   },
-          // },
-          "style", // dev mode
-          "css",
-          "sass",
-        ],
+        test: cssRegex,
+        exclude: [cssModuleRegex, /node_modules/],
+        use: getStyleLoaders(),
+      },
+      {
+        test: cssModuleRegex,
+        exclude: /node_modules/,
+        use: getStyleLoaders({
+          sourceMap: devMode,
+          modules: getModulesConfig(),
+        }),
       },
     ],
   },
@@ -118,10 +117,71 @@ const defaultConfig = {
     port: 8080,
     hot: true,
     liveReload: true,
-    // after: function (app, server, compiler) {
-    //   console.log("after", compiler);
-    // },
+    watchContentBase: true,
+    progress: true,
   },
 };
 
 module.exports = defaultConfig;
+
+function getModulesConfig() {
+  return {
+    // getLocalIdent: getLocalIdent,
+    mode: "local",
+    // exportGlobals: true,
+    // читаемое имя для дебага
+    localIdentName: "[name]-[local]-[hash:base64:5]",
+    // context: path.resolve(__dirname, "src"),
+    hashPrefix: "my-custom-hash",
+  };
+}
+
+function getStyleLoaders(cssOptions = {}) {
+  const loaders = [
+    {
+      loader: devMode
+        ? "style"
+        : {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: path.resolve(__dirname, "dist"),
+            },
+          },
+    },
+    {
+      loader: "css",
+      options: cssOptions,
+    },
+  ];
+
+  return loaders;
+}
+
+// [
+//   devMode
+//     ? "style"
+// : {
+//     loader: MiniCssExtractPlugin.loader,
+//     options: {
+//       publicPath: path.resolve(__dirname, "dist"),
+//     },
+//   },
+//   {
+//     loader: "css",
+//     options: {
+//       // стили применены к конкретному компоненту
+//       modules: {
+//         // getLocalIdent: getLocalIdent,
+//         mode: "local",
+//         // exportGlobals: true,
+//         // читаемое имя для дебага
+//         localIdentName: "[name]-[local]-[hash:base64:5]",
+//         // context: path.resolve(__dirname, "src"),
+//         hashPrefix: "my-custom-hash",
+//       },
+//       // генерация source map
+//       sourceMap: devMode,
+//     },
+//   },
+//   // "sass",
+// ],

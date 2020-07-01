@@ -4,19 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --open",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --open",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cross-env NODE_ENV=production webpack",
-    "dev": "cross-env NODE_ENV=development webpack"
+    "start:mode": "webpack --mode development --watch",
+    "build:mode": "webpack --mode production"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
     "rimraf": "3.0.2"
   },
   "devDependencies": {
     "@babel/core": "7.10.3",
     "@babel/preset-env": "7.10.3",
+    "@babel/preset-react": "7.10.4",
     "babel-loader": "8.1.0",
     "babel-minify-webpack-plugin": "^0.3.1",
     "cross-env": "7.0.2",
