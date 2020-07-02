@@ -122,13 +122,13 @@ function createDevServerConfig() {
     // Полная перезагрузка страницы
     watchContentBase: true,
     progress: true,
-    injectClient: false,
-    watchOptions: {
-      //времеожидания после изменения, после которого вебпак не выполняет сборку
-      aggregateTimeout: 200,
-      // интервал опроса
-      // poll: 1000,
-      ignored: /node_modules/,
-    },
+    // injectClient: false,
+    // watchOptions: {
+    //   //времеожидания после изменения, после которого вебпак не выполняет сборку
+    //   aggregateTimeout: 200,
+    //   // интервал опроса
+    //   // poll: 1000,
+    //   ignored: /node_modules/,
+    // },
   };
 }

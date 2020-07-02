@@ -1,6 +1,8 @@
 # webpack
 
-      npm install --save-dev @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader webpack webpack-cli style-loader webpack-dev-server file-loader del-cli
+      npm install --save-dev @babel/core @babel/preset-env @babel/preset-react babel-loader
+      css-loader webpack webpack-cli style-loader webpack-dev-server file-loader del-cli
+      typescript ts-loader terser-webpack-plugin
 
 Выполняет loaders в обратном порядке, с последнего до первого. Работает в два режима: prodaction, который создает оптимизированные файл, и development, который создает читаемый код. Флаг `--mode` позволяет выбрать режим.
 
@@ -41,6 +43,7 @@ node-sass, sass-loader - лоадеры стилей
 - css-loader - для загрузки и обьединения всех css файлов
 - style-loader - добавит все стили внутрь тега style
 - postcss-loader - применяет autoprefixer к CSS
+- typings-for-css-modules-loader - лоадер для модулей тс
 
 ## HTML
 

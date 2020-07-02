@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const devMode = process.env.NODE_ENV === "development";
 
-function getStyleLoaders(cssOptions = {}) {
+function getStyleLoaders(cssOptions = {}, isModule = false) {
   const development = [{ loader: "style" }];
 
   const production = [
@@ -72,6 +72,7 @@ const paths = [
   ["@ui", "ui/"],
   ["@features", "features/"],
   ["@assets", "assets/"],
+  ["@components", "components/"],
 ];
 
 module.exports = {
