@@ -18,6 +18,13 @@ function getStyleLoaders(cssOptions = {}, isModule = false) {
 
   const loaders = [
     {
+      loader: "postcss",
+      options: {
+        ident: "postcss",
+        plugins: [require("autoprefixer")({})],
+      },
+    },
+    {
       loader: "css",
       options: cssOptions,
     },
