@@ -72,7 +72,7 @@ const paths = [
   ["@ui", "ui/"],
   ["@features", "features/"],
   ["@assets", "assets/"],
-  ["@components", "components/"],
+  ["@pages", "pages/"],
 ];
 
 module.exports = {

@@ -20,7 +20,7 @@
       "@assets/*": ["src/assets/*"],
       "@ui/*": ["src/ui/*"],
       "@features/*": ["src/features/*"],
-      "@components/*": ["src/components/*"]
+      "@pages/*": ["src/pages/*"]
     }
   },
   "exclude": ["node_modules", "dist"],

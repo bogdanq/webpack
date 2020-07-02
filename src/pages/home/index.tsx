@@ -1,11 +1,10 @@
 import React from "react";
-import css from "../styles/App.module.css";
-// @ts-ignore
 import img from "@assets/0.jpeg";
-// @ts-ignore
 import img1 from "@assets/1.jpeg";
 import { Header } from "@ui/index";
-import "../styles/App.css";
+import { session } from "@features/session";
+import css from "./index.module.css";
+import "./index.css";
 
 const id = { age: 12 };
 
@@ -14,6 +13,7 @@ export function App() {
     <div>
       <div className={css.text}>
         <h1>Hello My React App! with css modules</h1>
+        <h1>session: {JSON.stringify(session)}</h1>
         <Header id={12} />
       </div>
 

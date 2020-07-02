@@ -1,4 +1,8 @@
 const path = require("path");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const safePostCssParser = require("postcss-safe-parser");
+
 const {
   getStyleLoaders,
   getWebpackAliases,
@@ -33,6 +37,36 @@ const createDefaultConfig = (isEnvDevelopment) => ({
       baseUrl: "src",
       paths,
     }),
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new OptimizeCSSAssetsPlugin({
+        cssProcessorOptions: {
+          parser: safePostCssParser,
+          map: false,
+        },
+        cssProcessorPluginOptions: {
+          preset: ["default", { minifyFontValues: { removeQuotes: false } }],
+        },
+      }),
+      new TerserPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true,
+        extractComments: true,
+        terserOptions: {
+          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+          output: {
+            comments: /@license/i,
+            comments: false,
+          },
+        },
+      }),
+    ],
+    // removeAvailableModules: false,
+    // removeEmptyChunks: false,
+    // splitChunks: false,
   },
   module: {
     //лоадеры

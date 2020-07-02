@@ -116,19 +116,16 @@ function createDevServerConfig() {
     contentBase: path.resolve(__dirname, "dist"),
     compress: true,
     clientLogLevel: "none",
-    port: 8080,
+    port: 3000,
     hot: true,
-    liveReload: true,
-    // Полная перезагрузка страницы
-    watchContentBase: true,
     progress: true,
     // injectClient: false,
-    // watchOptions: {
-    //   //времеожидания после изменения, после которого вебпак не выполняет сборку
-    //   aggregateTimeout: 200,
-    //   // интервал опроса
-    //   // poll: 1000,
-    //   ignored: /node_modules/,
-    // },
+    watchOptions: {
+      //времеожидания после изменения, после которого вебпак не выполняет сборку
+      aggregateTimeout: 200,
+      // интервал опроса
+      // poll: 1000,
+      ignored: /node_modules/,
+    },
   };
 }

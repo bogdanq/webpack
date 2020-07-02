@@ -2,33 +2,10 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
 
 const createProdactionConfig = () => {
   return {
     // Масси в екземпляров классов
-    optimization: {
-      minimizer: [
-        new OptimizeCSSAssetsPlugin({}),
-        new TerserPlugin({
-          cache: true,
-          parallel: true,
-          sourceMap: true,
-          extractComments: true,
-          terserOptions: {
-            // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
-            output: {
-              comments: /@license/i,
-              comments: false,
-            },
-          },
-        }),
-      ],
-      removeAvailableModules: false,
-      removeEmptyChunks: false,
-      splitChunks: false,
-    },
     plugins: [
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
