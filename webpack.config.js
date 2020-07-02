@@ -1,31 +1,29 @@
-const webpack = require("webpack");
 const path = require("path");
 const MinifyPlugin = require("babel-minify-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const NODE_ENV = process.env.NODE_ENV || "development";
-
-const devMode = NODE_ENV === "development";
+const {
+  getStyleLoaders,
+  getWebpackAliases,
+  getFileLOaderConfig,
+  paths,
+} = require("./config/utils");
 
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const nodeModuleRegex = /node_modules/;
+const imageRegex = /\.(png|jpe?g|gif)$/i;
 
-const paths = [
-  ["@ui", "ui/"],
-  ["@features", "features/"],
-];
-
-const defaultConfig = (webpackEnv) => {
+module.exports = function defaultConfig(webpackEnv) {
   const isEnvDevelopment = webpackEnv === "development";
   const isEnvProduction = webpackEnv === "production";
 
   return {
-    mode: NODE_ENV,
+    mode: process.env.NODE_ENV,
     entry: {
-      // ТОчки входа, которые будут в dist
+      // Точки входа, которые будут в dist
       main: path.resolve(__dirname, "src/index.js"),
       // cabinet: path.resolve(__dirname, "src/root/pages/user-cabinet"),
     },
@@ -47,17 +45,19 @@ const defaultConfig = (webpackEnv) => {
         template: path.resolve(__dirname, "public/index.html"),
         inject: true,
       }),
-      new webpack.DefinePlugin({
-        // передать переменные
-        NODE_ENV: JSON.stringify(NODE_ENV),
-      }),
-      // минификация js файлов
 
+      // new webpack.DefinePlugin({
+      //   // передать переменные
+      //   NODE_ENV: JSON.stringify(NODE_ENV),
+      // }),
+
+      // минификация js файлов
       new MinifyPlugin({
         removeConsole: !isEnvDevelopment,
         removeDebugger: !isEnvDevelopment,
         deadcode: false, // def => true
       }),
+
       new MiniCssExtractPlugin({
         filename: isEnvDevelopment ? "[name].css" : "[name].[hash].css",
         chunkFilename: isEnvDevelopment ? "[id].css" : "[id].[hash].css",
@@ -80,6 +80,7 @@ const defaultConfig = (webpackEnv) => {
             // },
           },
         },
+
         {
           test: cssRegex,
           exclude: [cssModuleRegex, nodeModuleRegex],
@@ -93,12 +94,25 @@ const defaultConfig = (webpackEnv) => {
           exclude: nodeModuleRegex,
           use: getStyleLoaders({
             sourceMap: isEnvDevelopment,
-            modules: getModulesConfig(),
+            modules: {
+              // getLocalIdent: getLocalIdent,
+              mode: "local",
+              // exportGlobals: true,
+              // читаемое имя для дебага
+              localIdentName: "[name]-[local]-[hash:base64:5]",
+              // context: path.resolve(__dirname, "src"),
+              hashPrefix: "my-custom-hash",
+            },
           }),
+        },
+
+        {
+          test: imageRegex,
+          exclude: nodeModuleRegex,
+          use: getFileLOaderConfig(),
         },
       ],
     },
-
     // указать где искать лоадеры
     resolve: {
       modules: ["node_modules"],
@@ -115,56 +129,5 @@ const defaultConfig = (webpackEnv) => {
       moduleExtensions: ["-loader"],
       extensions: [".js"],
     },
-    // devServer: createDevServerConfig(),
   };
 };
-
-module.exports = defaultConfig;
-
-function getModulesConfig() {
-  return {
-    // getLocalIdent: getLocalIdent,
-    mode: "local",
-    // exportGlobals: true,
-    // читаемое имя для дебага
-    localIdentName: "[name]-[local]-[hash:base64:5]",
-    // context: path.resolve(__dirname, "src"),
-    hashPrefix: "my-custom-hash",
-  };
-}
-
-function getStyleLoaders(cssOptions = {}) {
-  const loaders = [
-    {
-      loader: devMode
-        ? "style"
-        : {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: path.resolve(__dirname, "dist"),
-            },
-          },
-    },
-    {
-      loader: "css",
-      options: cssOptions,
-    },
-  ];
-
-  return loaders;
-}
-
-function getWebpackAliases(options = {}) {
-  const { baseUrl, paths } = options;
-
-  if (!baseUrl) {
-    return {};
-  }
-
-  const result = paths.reduce((acc, [key, value]) => {
-    acc[key] = path.resolve(__dirname, `${baseUrl}/${value}`);
-    return acc;
-  }, {});
-
-  return result;
-}

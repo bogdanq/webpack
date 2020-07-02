@@ -1,6 +1,6 @@
 # webpack
 
-      npm install --save-dev @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader webpack webpack-cli style-loader webpack-dev-server
+      npm install --save-dev @babel/core @babel/preset-env @babel/preset-react babel-loader css-loader webpack webpack-cli style-loader webpack-dev-server file-loader del-cli
 
 Выполняет loaders в обратном порядке, с последнего до первого. Работает в два режима: prodaction, который создает оптимизированные файл, и development, который создает читаемый код. Флаг `--mode` позволяет выбрать режим.
 
@@ -23,6 +23,13 @@
 ## Плагины
 
 Играют важную роль в выводе кода в файлы
+
+- copy-webpack-plugin (CopyWebpackPlugin) - копирует файлы и дериктории в билд дерикторию
+  [ext] - расширение файла
+  [path] - путь до ресурса относительно конфига
+  [name] - имя файла / ресурса
+  [contenthash] - метод хеширования
+  [publicPath] - путь до dist
 
 ## CSS
 
