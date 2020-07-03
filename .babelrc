@@ -4,8 +4,8 @@
       "@babel/preset-env",
       {
         "modules": false,
-        "useBuiltIns": "entry",
-        "corejs": 3
+        "loose": true,
+        "useBuiltIns": "usage"
       }
     ],
     "@babel/preset-react"
@@ -14,6 +14,7 @@
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-object-rest-spread",
     "@babel/plugin-proposal-optional-chaining",
+    "@babel/plugin-transform-typescript",
     [
       "babel-plugin-styled-components",
       {
@@ -22,17 +23,5 @@
         // "ssr": true
       }
     ]
-    // Есть в вебпаке
-    // [
-    //   require.resolve("babel-plugin-module-resolver"),
-    //   {
-    //     extensions: [".js", ".ts", ".tsx", ".json"],
-    //     alias: {
-    //       "@features": "./src/features",
-    //       "@ui": "./src/ui",
-    //       "@assets": "./src/assets",
-    //     },
-    //   },
-    // ],
   ]
 }
