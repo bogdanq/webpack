@@ -8,8 +8,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const isEnvDevelopment = process.env.NODE_ENV === "development";
 
-module.exports = function styleLoader() {
-  return isEnvDevelopment
+module.exports = function styleLoader(env = isEnvDevelopment) {
+  return env
     ? {
         loader: "style",
       }

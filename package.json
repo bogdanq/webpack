@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run delete && cross-env NODE_ENV=production webpack",
     "start:mode": "npm run delete && cross-env NODE_ENV=development  webpack --mode development",
-    "delete": "del-cli --force ./dist"
+    "delete": "del-cli --force ./dist",
+    "build:server": "webpack -p --config ./config/server.js --mode production"
   },
   "author": "",
   "license": "ISC",
@@ -16,11 +17,17 @@
     "@types/react": "16.9.41",
     "@types/react-dom": "16.9.8",
     "dave": "0.2.1",
+    "express": "^4.17.1",
+    "raw-loader": "^4.0.1",
     "react": "16.13.1",
     "react-dev-utils": "10.2.1",
     "react-dom": "16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-router-reconfig": "^1.0.15",
     "rimraf": "3.0.2",
-    "webpack-merge": "4.2.2"
+    "webpack-merge": "4.2.2",
+    "webpack-node-externals": "^2.5.0",
+    "webpack-stats-plugin": "^0.3.2"
   },
   "devDependencies": {
     "@babel/core": "7.10.3",
@@ -31,6 +38,7 @@
     "@babel/plugin-transform-typescript": "7.10.4",
     "@babel/preset-env": "7.10.3",
     "@babel/preset-react": "7.10.4",
+    "@types/react-router-dom": "^5.1.5",
     "autoprefixer": "9.8.4",
     "babel-loader": "8.1.0",
     "babel-minify-webpack-plugin": "^0.3.1",

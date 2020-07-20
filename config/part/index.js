@@ -7,7 +7,7 @@ const path = require("path");
 module.exports = function webpackParts(isEnvDevelopment) {
   return {
     entry: {
-      main: path.resolve(__dirname, "../../src/index.tsx"),
+      main: path.resolve(__dirname, "../../src/client/index.tsx"),
     },
     output: {
       filename: isEnvDevelopment

@@ -16,11 +16,11 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "paths": {
-      "*": ["src/*"],
-      "@assets/*": ["src/assets/*"],
-      "@ui/*": ["src/ui/*"],
-      "@features/*": ["src/features/*"],
-      "@pages/*": ["src/pages/*"]
+      "*": ["src/client/*"],
+      "@assets/*": ["src/client/assets/*"],
+      "@ui/*": ["src/client/ui/*"],
+      "@features/*": ["src/client/features/*"],
+      "@pages/*": ["src/client/pages/*"]
     }
   },
   "exclude": ["node_modules", "dist"],

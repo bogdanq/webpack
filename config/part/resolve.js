@@ -9,7 +9,7 @@ module.exports = function resolvePart(isEnvDevelopment) {
     modules: ["node_modules"],
     extensions: [".ts", ".tsx", ".js", ".jsx"],
     alias: getWebpackAliases({
-      baseUrl: "src",
+      baseUrl: "src/client",
       paths,
     }),
   };

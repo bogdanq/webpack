@@ -1,5 +1,7 @@
 const path = require("path");
 
+const { StatsWriterPlugin } = require("webpack-stats-plugin");
+
 const HtmlWebpackPlugin = require("./plugins/HtmlWebpackPlugin");
 const MiniCssExtractPlugin = require("./plugins/MiniCssExtractPlugin");
 const OptimizeCSSAssetsPlugin = require("./plugins/OptimizeCSSAssetsPlugin");
@@ -27,7 +29,16 @@ const createDefaultConfig = (isEnvDevelopment) => ({
   resolve: resolvePart(),
   optimization: {
     minimize: true,
-    minimizer: [OptimizeCSSAssetsPlugin, TerserPlugin],
+    minimizer: [
+      new StatsWriterPlugin({
+        stats: {
+          all: false,
+          assets: true,
+        },
+      }),
+      OptimizeCSSAssetsPlugin,
+      TerserPlugin,
+    ],
     // removeAvailableModules: false,
     // removeEmptyChunks: false,
     // splitChunks: false,
@@ -35,6 +46,7 @@ const createDefaultConfig = (isEnvDevelopment) => ({
   plugins: [HtmlWebpackPlugin, MiniCssExtractPlugin],
   module: {
     rules: [
+      // { test: /\.txt$/, use: "raw" },
       {
         test: tsRegex,
         exclude: nodeModuleRegex,
