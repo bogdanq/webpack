@@ -1,20 +1,21 @@
 const path = require("path");
+const webpack = require("webpack");
 
 const { StatsWriterPlugin } = require("webpack-stats-plugin");
 
-const HtmlWebpackPlugin = require("./plugins/HtmlWebpackPlugin");
-const MiniCssExtractPlugin = require("./plugins/MiniCssExtractPlugin");
 const OptimizeCSSAssetsPlugin = require("./plugins/OptimizeCSSAssetsPlugin");
 const TerserPlugin = require("./plugins/TerserPlugin");
+const fileLoader = require("./loaders/file");
+
+const HtmlWebpackPlugin = require("./plugins/HtmlWebpackPlugin");
+const MiniCssExtractPlugin = require("./plugins/MiniCssExtractPlugin");
 
 const cssLoader = require("./loaders/css");
 const styleLoader = require("./loaders/style");
 const postCssLoader = require("./loaders/postcss");
-const babelLoader = require("./loaders/babel");
-const fileLoader = require("./loaders/file");
 
-const webpackParts = require("./part");
 const resolvePart = require("./part/resolve");
+const webpackParts = require("./part");
 
 const cssRegex = /\.css$/;
 const tsRegex = /\.ts(x?)$/;
@@ -22,11 +23,22 @@ const cssModuleRegex = /\.module\.css$/;
 const nodeModuleRegex = /node_modules/;
 const imageRegex = /\.(png|jpe?g|gif)$/i;
 
-const createDefaultConfig = (isEnvDevelopment) => ({
+const isEnvDevelopment = false;
+
+const t = {
   mode: process.env.NODE_ENV,
   ...webpackParts(isEnvDevelopment),
+  // devtool: 'eval', => по умолчанию
   devtool: "cheap-inline-module-source-map",
+  // указать где искать лоадеры
   resolve: resolvePart(),
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+    }),
+    HtmlWebpackPlugin,
+    MiniCssExtractPlugin,
+  ],
   optimization: {
     minimize: true,
     minimizer: [
@@ -39,19 +51,24 @@ const createDefaultConfig = (isEnvDevelopment) => ({
       OptimizeCSSAssetsPlugin,
       TerserPlugin,
     ],
-    removeAvailableModules: false,
-    removeEmptyChunks: false,
-    splitChunks: false,
   },
-  plugins: [HtmlWebpackPlugin, MiniCssExtractPlugin],
   module: {
+    //лоадеры
     rules: [
-      // { test: /\.txt$/, use: "raw" },
+      // {
+      //   test: /\.(jpeg|jpg|png)$/,
+      //   use: {
+      //     loader: "url",
+      //   },
+      // },
       {
         test: tsRegex,
         exclude: nodeModuleRegex,
         include: path.resolve(__dirname, "../src"),
-        use: babelLoader,
+        use: [
+          { loader: "babel" },
+          { loader: "ts-loader", options: { happyPackMode: true } },
+        ],
       },
       {
         test: cssRegex,
@@ -70,11 +87,13 @@ const createDefaultConfig = (isEnvDevelopment) => ({
       },
     ],
   },
+  // указать где искать лоадеры и префикс loader убрать
   resolveLoader: {
     modules: ["node_modules"],
+    // что бы не писать приставку loader лоадерам
     moduleExtensions: ["-loader"],
     extensions: [".js"],
   },
-});
+};
 
-module.exports = { createDefaultConfig };
+module.exports = t;

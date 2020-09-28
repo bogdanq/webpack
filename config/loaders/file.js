@@ -6,7 +6,6 @@
 
 const path = require("path");
 
-const PORT = process.env.PORT;
 const isEnvDevelopment = process.env.NODE_ENV === "development";
 
 module.exports = function fileLoader() {
@@ -19,13 +18,6 @@ module.exports = function fileLoader() {
         }
 
         return "[contenthash].[ext]";
-      },
-      publicPath: (url, resourcePath, context) => {
-        if (isEnvDevelopment && PORT) {
-          return `http://localhost:${PORT}/${url}`;
-        }
-
-        return path.resolve(__dirname, `../../dist/${url}`);
       },
     },
   };

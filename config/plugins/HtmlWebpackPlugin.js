@@ -2,6 +2,7 @@
  * @see https://www.npmjs.com/package/html-webpack-plugin
  * Плагин, который упрощает создание HTML-файлов для обслуживания ваших пакетов
  * Интегрирует все подключения в переданный шаблон
+ * генерирует HTML файл, вставляет в него скрипты и записывает в /dist
  */
 
 const path = require("path");
@@ -25,7 +26,7 @@ const minifyOptions = isEnvDevelopment
   : {};
 
 module.exports = new HtmlWebpackPlugin({
-  filename: isEnvDevelopment ? "index.[contenthash].html" : "index.html",
+  filename: "index.html",
   template: path.resolve(__dirname, "../../public/index.html"),
   inject: true,
   cache: !isEnvDevelopment,
